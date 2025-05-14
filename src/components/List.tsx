@@ -11,7 +11,7 @@ interface ListProps {
   onCardClick: (card: CardType) => void;
   onEditListTitle: (listId: string, newTitle: string) => void;
   onRemoveList: (listId: string) => void;
-  onSortByTitle: (listId: string, updatedCards: CardType[]) => void;
+  onSortBy: (listId: string, updatedCards: CardType[]) => void;
 }
 
 const List: React.FC<ListProps> = ({
@@ -19,12 +19,15 @@ const List: React.FC<ListProps> = ({
   onAddCard,
   onCardClick,
   onEditListTitle,
+  onRemoveList,
+  onSortBy,
 }) => {
   const [isAddingCard, setIsAddingCard] = useState(false);
   const [newCardTitle, setNewCardTitle] = useState('');
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [listTitle, setListTitle] = useState(list.title);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isAscending, setIsAscending] = useState(false);
 
   const handleAddCard = () => {
     if (newCardTitle.trim()) {
@@ -86,11 +89,29 @@ const List: React.FC<ListProps> = ({
   };
 
   const handleRemoveList = () => {
-    throw new Error('Function not implemented.');
+    onRemoveList(list.id)
   };
 
-  const handleSortByTitle = () => {
-    throw new Error('Function not implemented.');
+  const handleSort = (field: string) => {
+    setIsAscending(prev => !prev)
+
+    const updatedCards = [...list.cards].sort((a,b) => {
+
+       switch (field) {
+        case 'title':
+          return isAscending
+            ? b.title.localeCompare(a.title)
+            : a.title.localeCompare(b.title)
+        case 'dateAdded':
+          return isAscending
+            ? b.dateAdded.getTime() - a.dateAdded.getTime()
+            : a.dateAdded.getTime() - b.dateAdded.getTime()
+        default:
+          return 0;
+      }
+    })
+
+    onSortBy(list.id, updatedCards)
   };
 
   return (
@@ -136,11 +157,13 @@ const List: React.FC<ListProps> = ({
                 </li>
                 <li
                   className="py-2 px-4 rounded cursor-pointer hover:bg-[#8d80d6]"
-                  onClick={handleSortByTitle}
+                  onClick={() => handleSort("title")}
                 >
                   Sort by title (Ascending and Descending)
                 </li>
-                <li className="py-2 px-4 rounded cursor-pointer hover:bg-[#8d80d6]">
+                <li className="py-2 px-4 rounded cursor-pointer hover:bg-[#8d80d6]"
+                  onClick={() => handleSort("dateAdded")}
+                >
                   Sort by date (Ascending and Descending)
                 </li>
               </ul>
