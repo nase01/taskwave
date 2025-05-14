@@ -11,13 +11,13 @@ const Main: React.FC<MainProps> = ({ searchKey }) => {
     <main
       className="flex-1 overflow-hidden shadow-md"
       style={{
-        backgroundColor: 'var(--main-bg-color)', // Dynamic background based on theme
+        backgroundColor: '#2e4053', // Dynamic background based on theme
         color: 'var(--text-color)', // Dynamic text color based on theme
       }}
     >
       <div className="py-4 px-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold">Sprint 127</h2>
+          <h2 className="text-xl font-semibold">Sprint Sony Nase May 14, 2025</h2>
           <button className="flex items-center rounded-md px-3 py-1.5 text-sm transition-colors">
             <span className="mr-1">Customize</span>
             <svg
